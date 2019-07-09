@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 import android.widget.Toolbar;
 
 import com.example.binstagram.R;
@@ -53,6 +54,9 @@ public class HomeActivity extends AppCompatActivity {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
+    @BindView(R.id.btnLogOut)
+    Button btnLogOut;
+
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +96,14 @@ public class HomeActivity extends AppCompatActivity {
         startActivityForResult(photoPickerIntent, RESULT_LOAD_IMG);
     }
 
+    @OnClick(R.id.btnLogOut)
+    public void logOut() {
+        ParseUser.logOut();
+        Toast.makeText(this, "Logged out!", Toast.LENGTH_SHORT).show();
+        startActivity(new Intent(this, LoginActivity.class));
+        finish();
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (resultCode == Activity.RESULT_OK && requestCode == RESULT_LOAD_IMG) {
@@ -119,6 +131,7 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
+    //TODO: Refactor
     private File createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
