@@ -1,4 +1,4 @@
-package com.example.binstagram;
+package com.example.binstagram.activities;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toolbar;
 
+import com.example.binstagram.R;
 import com.example.binstagram.models.Post;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -49,7 +50,7 @@ public class HomeActivity extends AppCompatActivity {
     @BindView(R.id.etDescription)
     EditText etDescription;
 
-    @BindView(R.id.app_bar)
+    @BindView(R.id.toolbar)
     Toolbar toolbar;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)

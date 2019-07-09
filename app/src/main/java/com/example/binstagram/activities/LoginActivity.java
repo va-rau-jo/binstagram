@@ -1,4 +1,4 @@
-package com.example.binstagram;
+package com.example.binstagram.activities;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toolbar;
 
+import com.example.binstagram.R;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
@@ -23,13 +24,16 @@ public class LoginActivity extends AppCompatActivity {
     @BindView(R.id.btnLogin)
     Button btnLogin;
 
-    @BindView(R.id.etUsername)
+    @BindView(R.id.btnGoToSignup)
+    Button btnSignup;
+
+    @BindView(R.id.etLoginUsername)
     EditText etUsername;
 
-    @BindView(R.id.etPassword)
+    @BindView(R.id.etLoginPassword)
     EditText etPassword;
 
-    @BindView(R.id.app_bar)
+    @BindView(R.id.toolbar)
     Toolbar toolbar;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -42,7 +46,6 @@ public class LoginActivity extends AppCompatActivity {
         setActionBar(toolbar);
         if(getActionBar() != null)
             getActionBar().setDisplayShowTitleEnabled(false);
-
     }
 
     @OnClick(R.id.btnLogin)
@@ -50,6 +53,11 @@ public class LoginActivity extends AppCompatActivity {
         String username = etUsername.getText().toString();
         String password = etPassword.getText().toString();
         login(username, password);
+    }
+
+    @OnClick(R.id.btnGoToSignup)
+    public void goToSignupScreen() {
+        startActivity(new Intent(this, SignupActivity.class));
     }
 
     private void login(String username, String password) {
