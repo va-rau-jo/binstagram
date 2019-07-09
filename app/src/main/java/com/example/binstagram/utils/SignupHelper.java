@@ -4,7 +4,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class SignupHelper {
-
     /**
      * method is used for checking valid email id format.
      *

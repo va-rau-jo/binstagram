@@ -13,10 +13,14 @@
         <!--android:adjustViewBounds="true"-->
         <!--android:src="@drawable/camera_shadow_fill" />-->
 
+
+
+
     <ImageView
         android:id="@+id/tv_header_title"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:src="@drawable/nav_logo_whiteout" />
+
 </android.widget.Toolbar>
