@@ -11,10 +11,10 @@ import java.util.Date;
 @ParseClassName("Post")
 public class Post extends ParseObject {
 
+    public static final Integer QUERY_LIMIT = 3;
     private static final String KEY_DESCRIPTION = "description";
     private static final String KEY_IMAGE = "image";
     private static final String KEY_USER = "user";
-    private static final String KEY_TIMESTAMP = "created_at";
 
     public String getDescription() {
         return getString(KEY_DESCRIPTION);
@@ -47,8 +47,16 @@ public class Post extends ParseObject {
             super(Post.class);
         }
 
+        public Query getNext(int alreadyLoadedAmount) {
+            orderByDescending("createdAt");
+            setSkip(alreadyLoadedAmount);
+            setLimit(QUERY_LIMIT);
+            return this;
+        }
+
         public Query getTop() {
-            setLimit(20);
+            orderByDescending("createdAt");
+            setLimit(QUERY_LIMIT);
             return this;
         }
 
