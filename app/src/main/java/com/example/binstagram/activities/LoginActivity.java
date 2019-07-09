@@ -46,6 +46,10 @@ public class LoginActivity extends AppCompatActivity {
         setActionBar(toolbar);
         if(getActionBar() != null)
             getActionBar().setDisplayShowTitleEnabled(false);
+
+        // Persist user
+        if(ParseUser.getCurrentUser() != null)
+            onSuccessfulLogin();
     }
 
     @OnClick(R.id.btnLogin)
@@ -66,13 +70,17 @@ public class LoginActivity extends AppCompatActivity {
             public void done(ParseUser user, ParseException e) {
                 if(e == null) {
                     Log.d("here", "lets go gaosdfasdfsd");
-                    startActivity(new Intent(LoginActivity.this, HomeActivity.class));
-                    finish();
+                    onSuccessfulLogin();
                 } else {
                     Log.d("LoginActivity Error", "asdfasdfsdf");
                     e.printStackTrace();
                 }
             }
         });
+    }
+
+    private void onSuccessfulLogin() {
+        startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+        finish();
     }
 }
