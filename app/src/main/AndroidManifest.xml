@@ -20,6 +20,7 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
+        <activity android:name=".activities.DetailActivity"></activity>
         <activity android:name=".activities.CaptionActivity" />
         <activity android:name=".activities.SelectActivity" />
         <activity android:name=".activities.SignupActivity" />
@@ -45,8 +46,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/fileprovider" />
         </provider>
-
-
     </application>
 
 </manifest>
