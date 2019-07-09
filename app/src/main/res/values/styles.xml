@@ -6,10 +6,17 @@
     </style>
 
     <style name="ToolbarTheme" parent="Theme.AppCompat.Light.NoActionBar">
-
-        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:background">@color/toolbarColor</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="login_button" parent="TextAppearance.AppCompat.Widget.Button.Colored">
+        <item name="android:colorBackground">@color/buttonBlue</item>
+        <item name="android:background">@color/buttonBlue</item>
+    </style>
+
+    <style name="login_input" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
     </style>
 
 </resources>

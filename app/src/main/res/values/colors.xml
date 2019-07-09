@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="toolbarColor">#FFFFFF</color>
+    <color name="toolbarColor">#c7faff</color>
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
     <color name="black">#000000</color>
+    <color name="instagramBlue">#405DE6</color>
+    <color name="buttonBlue">#4c92fc</color>
 </resources>
