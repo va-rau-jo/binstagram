@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Binstagram</string>
+    <string name="content_description"> A post </string>
 </resources>
