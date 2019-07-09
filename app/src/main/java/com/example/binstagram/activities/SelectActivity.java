@@ -117,7 +117,7 @@ public class SelectActivity extends AppCompatActivity {
 
     private File createReducedImageFile(File photoFile) {
         Bitmap rawTakenImage = BitmapFactory.decodeFile(photoFile.getPath());
-        Bitmap resizedBitmap = BitmapScaler.scaleToFitWidth(rawTakenImage, 256);
+        Bitmap resizedBitmap = BitmapScaler.scaleToFitWidth(rawTakenImage, 512);
 
         // Configure byte output stream
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
