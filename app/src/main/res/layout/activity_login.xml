@@ -73,7 +73,7 @@
 
     <Button
         android:id="@+id/btnGoToSignup"
-        style="@style/login_button"
+        style="@style/signup_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -83,6 +83,7 @@
         android:layout_marginRight="32dp"
         android:text="Sign Up"
         android:textAllCaps="false"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnLogin" />

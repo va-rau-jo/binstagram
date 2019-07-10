@@ -16,6 +16,11 @@
         <item name="android:background">@color/buttonBlue</item>
     </style>
 
+    <style name="signup_button" parent="TextAppearance.AppCompat.Widget.Button.Colored">
+        <item name="android:colorBackground">@color/buttonGreen</item>
+        <item name="android:background">@color/buttonGreen</item>
+    </style>
+
     <style name="login_input" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
     </style>
 

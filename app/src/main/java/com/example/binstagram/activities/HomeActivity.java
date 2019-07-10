@@ -73,7 +73,7 @@ public class HomeActivity extends AppCompatActivity {
         scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                loadNextData();
+                loadNextPosts();
             }
         };
 
@@ -88,6 +88,17 @@ public class HomeActivity extends AppCompatActivity {
 
         // Load the initial posts
         loadTopPosts();
+    }
+
+    /**
+     * Logs the user out and sends them back to the LoginActivity
+     */
+    @OnClick(R.id.btnLogOut)
+    public void logOut() {
+        ParseUser.logOut();
+        Toast.makeText(this, "Logged out!", Toast.LENGTH_SHORT).show();
+        startActivity(new Intent(this, LoginActivity.class));
+        finish();
     }
 
     private void addNavigationItemSelectedListener() {
@@ -124,9 +135,44 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     /**
-     * Loads the next posts for the infinite scrolling funtionality
+     * Adds the OnRefreshListener to the SwipeRefreshLayout, so posts are reloaded
      */
-    private void loadNextData() {
+    private void addSwipeRefreshListener() {
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                scrollListener.resetState();
+                adapter.clear();
+                loadTopPosts();
+            }
+        });
+    }
+
+    private void loadTopPosts() {
+        final Post.Query postQuery = new Post.Query();
+        postQuery.chronological()
+                .withUser()
+                .getTop();
+
+        postQuery.findInBackground(new FindCallback<Post>() {
+            @Override
+            public void done(List<Post> objects, ParseException e) {
+                if(e == null) {
+                    for(int i = 0; i < objects.size(); i++) {
+                        posts.add(objects.get(i));
+                        adapter.notifyItemInserted(posts.size() - 1);
+                    }
+                } else {
+                    e.printStackTrace();
+                }
+
+                if(swipeContainer != null)
+                    swipeContainer.setRefreshing(false);
+            }
+        });
+    }
+
+    private  void loadNextPosts() {
         final Post.Query postQuery = new Post.Query();
         postQuery.chronological()
                 .withUser()
@@ -145,56 +191,5 @@ public class HomeActivity extends AppCompatActivity {
                 }
             }
         });
-    }
-
-    /**
-     * Adds the OnRefreshListener to the SwipeRefreshLayout, so posts are reloaded
-     */
-    private void addSwipeRefreshListener() {
-        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                scrollListener.resetState();
-                adapter.clear();
-                loadTopPosts();
-            }
-        });
-    }
-
-    /**
-     * Loads the top posts by querying the parse server with the top x amount of posts from
-     * the current user
-     */
-    private void loadTopPosts() {
-        final Post.Query postQuery = new Post.Query();
-        postQuery.chronological()
-                .withUser()
-                .getTop();
-
-        postQuery.findInBackground(new FindCallback<Post>() {
-            @Override
-            public void done(List<Post> objects, ParseException e) {
-                if(e == null) {
-                    for(int i = 0; i < objects.size(); i++) {
-                        posts.add(objects.get(i));
-                        adapter.notifyItemInserted(posts.size() - 1);
-                    }
-                } else {
-                    e.printStackTrace();
-                }
-                swipeContainer.setRefreshing(false);
-            }
-        });
-    }
-
-    /**
-     * Logs the user out and sends them back to the LoginActivity
-     */
-    @OnClick(R.id.btnLogOut)
-    public void logOut() {
-        ParseUser.logOut();
-        Toast.makeText(this, "Logged out!", Toast.LENGTH_SHORT).show();
-        startActivity(new Intent(this, LoginActivity.class));
-        finish();
     }
 }
