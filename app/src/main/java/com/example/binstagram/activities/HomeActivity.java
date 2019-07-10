@@ -39,9 +39,6 @@ public class HomeActivity extends AppCompatActivity {
     @BindView(R.id.btnCreatePost)
     ImageButton btnCreatePost;
 
-    @BindView(R.id.btnRefresh)
-    Button btnRefresh;
-
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
@@ -90,7 +87,10 @@ public class HomeActivity extends AppCompatActivity {
      */
     private void loadNextData() {
         final Post.Query postQuery = new Post.Query();
-        postQuery.getNext(posts.size()).withUser();
+        postQuery
+                .chronological()
+                .withUser()
+                .getNext(posts.size());
 
         postQuery.findInBackground(new FindCallback<Post>() {
             @Override
@@ -127,7 +127,10 @@ public class HomeActivity extends AppCompatActivity {
      */
     private void loadTopPosts() {
         final Post.Query postQuery = new Post.Query();
-        postQuery.getTop().withUser();
+        postQuery
+                .chronological()
+                .withUser()
+                .getTop();
 
         postQuery.findInBackground(new FindCallback<Post>() {
             @Override
@@ -140,6 +143,7 @@ public class HomeActivity extends AppCompatActivity {
                 } else {
                     e.printStackTrace();
                 }
+                swipeContainer.setRefreshing(false);
             }
         });
     }

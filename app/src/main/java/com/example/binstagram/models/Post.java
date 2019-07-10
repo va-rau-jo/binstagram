@@ -47,15 +47,18 @@ public class Post extends ParseObject {
             super(Post.class);
         }
 
-        public Query getNext(int alreadyLoadedAmount) {
+        public Query chronological() {
             orderByDescending("createdAt");
+            return this;
+        }
+
+        public Query getNext(int alreadyLoadedAmount) {
             setSkip(alreadyLoadedAmount);
             setLimit(QUERY_LIMIT);
             return this;
         }
 
         public Query getTop() {
-            orderByDescending("createdAt");
             setLimit(QUERY_LIMIT);
             return this;
         }
@@ -64,6 +67,5 @@ public class Post extends ParseObject {
             include("user");
             return this;
         }
-
     }
 }
