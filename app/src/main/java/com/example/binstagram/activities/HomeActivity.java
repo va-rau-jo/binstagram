@@ -4,10 +4,13 @@ import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -45,6 +48,10 @@ public class HomeActivity extends AppCompatActivity {
     @BindView(R.id.btnLogOut)
     Button btnLogOut;
 
+    @BindView(R.id.bottom_navigation)
+    BottomNavigationView bottomNavigationView;
+
+
     private ArrayList<Post> posts;
     private PostAdapter adapter;
     private EndlessRecyclerViewScrollListener scrollListener;
@@ -72,6 +79,10 @@ public class HomeActivity extends AppCompatActivity {
                 loadNextData();
             }
         };
+
+        // Sets the bottom navigation bar on clicks
+        addNavigationItemSelectedListener();
+
         // Adds the scroll listener to RecyclerView
         rvPosts.addOnScrollListener(scrollListener);
 
@@ -80,6 +91,33 @@ public class HomeActivity extends AppCompatActivity {
 
         // Load the initial posts
         loadTopPosts();
+    }
+
+    private void addNavigationItemSelectedListener() {
+        bottomNavigationView.setOnNavigationItemSelectedListener(
+                new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.home:
+                        // do something here
+                        return true;
+                    case R.id.search:
+                        // do something here
+                        return true;
+                    case R.id.create_new_post:
+                        // do something here
+                        return true;
+                    case R.id.favorites:
+                        // do something here
+                        return true;
+                    case R.id.profile:
+                        // do something here
+                        return true;
+                    default: return true;
+                }
+            }
+        });
     }
 
     /**
