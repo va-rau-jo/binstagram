@@ -20,7 +20,8 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
-        <activity android:name=".activities.DetailActivity"></activity>
+        <activity android:name=".activities.ProfileActivity"></activity>
+        <activity android:name=".activities.DetailActivity" />
         <activity android:name=".activities.CaptionActivity" />
         <activity android:name=".activities.SelectActivity" />
         <activity android:name=".activities.SignupActivity" />
@@ -39,7 +40,7 @@
 
         <provider
             android:name="android.support.v4.content.FileProvider"
-            android:authorities="com.codepath.binstagram.fileprovider"
+            android:authorities="@string/file_provider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

@@ -3,22 +3,27 @@ package com.example.binstagram.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.binstagram.R;
 import com.example.binstagram.models.Post;
 import com.example.binstagram.utils.FormatHelper;
-import com.parse.ParseImageView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 public class DetailActivity extends AppCompatActivity {
     private Post post;
 
     @BindView(R.id.ivImage)
-    ParseImageView ivImage;
+    ImageView ivImage;
+
+    @BindView(R.id.ivProfileImage)
+    ImageView ivProfileImage;
 
     @BindView(R.id.tvUsername)
     TextView tvUsername;
@@ -57,8 +62,13 @@ public class DetailActivity extends AppCompatActivity {
         tvUsernameLabel.setText(post.getUser().getUsername());
         tvDescription.setText(post.getDescription());
 
-        ivImage.setParseFile(post.getImage());
-        ivImage.loadInBackground();
+        Glide.with(this)
+                .load(post.getImage().getUrl())
+                .bitmapTransform(new CropCircleTransformation(this))
+                .into(ivProfileImage);
 
+        Glide.with(this)
+                .load(post.getImage().getUrl())
+                .into(ivImage);
     }
 }

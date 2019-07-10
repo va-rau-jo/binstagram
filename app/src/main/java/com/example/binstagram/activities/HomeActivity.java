@@ -12,7 +12,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
@@ -39,9 +38,6 @@ public class HomeActivity extends AppCompatActivity {
     @BindView(R.id.rvPosts)
     RecyclerView rvPosts;
 
-    @BindView(R.id.btnCreatePost)
-    ImageButton btnCreatePost;
-
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
@@ -51,6 +47,7 @@ public class HomeActivity extends AppCompatActivity {
     @BindView(R.id.bottom_navigation)
     BottomNavigationView bottomNavigationView;
 
+    private MenuItem previousItem;
 
     private ArrayList<Post> posts;
     private PostAdapter adapter;
@@ -68,7 +65,7 @@ public class HomeActivity extends AppCompatActivity {
             getActionBar().setDisplayShowTitleEnabled(false);
 
         posts = new ArrayList<>();
-        adapter = new PostAdapter(HomeActivity.this, posts);
+        adapter = new PostAdapter(posts);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         rvPosts.setLayoutManager(linearLayoutManager);
         rvPosts.setAdapter(adapter);
@@ -98,21 +95,27 @@ public class HomeActivity extends AppCompatActivity {
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                if(previousItem != null) {
+                    previousItem.setChecked(false);
+                }
+                item.setChecked(true);
+
                 switch (item.getItemId()) {
                     case R.id.home:
-                        // do something here
+                        // do nothing, already on home activity
                         return true;
                     case R.id.search:
-                        // do something here
+                        // TODO: implement search
                         return true;
                     case R.id.create_new_post:
-                        // do something here
+                        startActivity(new Intent(HomeActivity.this, SelectActivity.class));
                         return true;
                     case R.id.favorites:
                         // do something here
                         return true;
                     case R.id.profile:
-                        // do something here
+                        startActivity(new Intent(HomeActivity.this, ProfileActivity.class));
+                        finish();
                         return true;
                     default: return true;
                 }
@@ -125,8 +128,7 @@ public class HomeActivity extends AppCompatActivity {
      */
     private void loadNextData() {
         final Post.Query postQuery = new Post.Query();
-        postQuery
-                .chronological()
+        postQuery.chronological()
                 .withUser()
                 .getNext(posts.size());
 
@@ -165,8 +167,7 @@ public class HomeActivity extends AppCompatActivity {
      */
     private void loadTopPosts() {
         final Post.Query postQuery = new Post.Query();
-        postQuery
-                .chronological()
+        postQuery.chronological()
                 .withUser()
                 .getTop();
 
@@ -184,14 +185,6 @@ public class HomeActivity extends AppCompatActivity {
                 swipeContainer.setRefreshing(false);
             }
         });
-    }
-
-    /**
-     * Navigates to the SelectActivity class to open the camera or select an image from the gallery
-     */
-    @OnClick(R.id.btnCreatePost)
-    public void getFileFromPhone() {
-        startActivity(new Intent(this, SelectActivity.class));
     }
 
     /**

@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">Binstagram</string>
     <string name="content_description"> A post </string>
+    <string name="upload_profile_image_text">Upload a profile image</string>
+    <string name="file_provider">com.codepath.binstagram.fileprovider"</string>
 </resources>

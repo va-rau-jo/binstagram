@@ -6,6 +6,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class FormatHelper {
 
@@ -32,34 +34,15 @@ public class FormatHelper {
     }
 
     /**
-     * Formats large texts nicely (2,000 -> 2k, 5324 -> 5k, etc)
-     * @param original The unformatted text
-     * @return The formatted string
+     * method is used for checking valid email id format.
+     *
+     * @param email
+     * @return boolean true for valid false for invalid
      */
-    public static String formatCounter(int original) {
-        int decimals = 1;
-
-        if(original / 1000000 > 0) { // over 1 million
-            double divided = (double)original / 1000000;
-            return round(divided , decimals) + "m";
-        } else if(original / 1000 > 0) { // 1000-999999
-            double divided = (double)original / 1000;
-            return round(divided, decimals) + "k";
-        } else {
-            return original + "";
-        }
-    }
-
-    /**
-     * Helper function that rounds the value to however many decimal places
-     * @param value Value to be rounded
-     * @param places Decimal places
-     * @return The formatted double
-     */
-    private static double round(double value, int places) {
-        long factor = (long) Math.pow(10, places);
-        value = value * factor;
-        long tmp = Math.round(value);
-        return (double) tmp / factor;
+    public static boolean isEmailValid(String email) {
+        String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
+        Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
     }
 }

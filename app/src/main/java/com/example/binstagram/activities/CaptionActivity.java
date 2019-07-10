@@ -59,8 +59,10 @@ public class CaptionActivity extends AppCompatActivity {
         if(getActionBar() != null)
             getActionBar().setDisplayShowTitleEnabled(false);
 
-        imageFile = (File) getIntent().getExtras().get("image");
-        setPreviewImage();
+        if(getIntent().getExtras() != null) {
+            imageFile = (File) getIntent().getExtras().get("image");
+            setPreviewImage();
+        }
     }
 
     private void setPreviewImage() {

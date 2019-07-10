@@ -1,6 +1,5 @@
 package com.example.binstagram.adapters;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -8,27 +7,29 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.binstagram.R;
 import com.example.binstagram.activities.DetailActivity;
+import com.example.binstagram.activities.ProfileActivity;
 import com.example.binstagram.models.Post;
-import com.parse.ParseImageView;
+import com.parse.ParseUser;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
 
     private ArrayList<Post> posts;
     private Context context;
-    private Activity activity;
 
-    public PostAdapter(Activity context, ArrayList<Post> posts) {
+    public PostAdapter(ArrayList<Post> posts) {
         this.posts = posts;
-        this.activity = context;
     }
 
     /**
@@ -55,12 +56,21 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
     @Override
     public void onBindViewHolder(@NonNull PostAdapter.ViewHolder viewHolder, int index) {
         Post post = posts.get(index);
-        viewHolder.tvUsername.setText(post.getUser().getUsername());
-        viewHolder.tvUsernameLabel.setText(post.getUser().getUsername());
+        ParseUser user = post.getUser();
+        viewHolder.tvUsername.setText(user.getUsername());
+        viewHolder.tvUsernameLabel.setText(user.getUsername());
         viewHolder.tvDescription.setText(post.getDescription());
 
-        viewHolder.ivImage.setParseFile(post.getImage());
-        viewHolder.ivImage.loadInBackground();
+        Glide.with(context)
+                .load(post.getImage().getUrl())
+                .into(viewHolder.ivImage);
+
+        if(user.getParseFile("profileImage") != null) {
+            Glide.with(context)
+                    .load(user.getParseFile("profileImage").getUrl())
+                    .bitmapTransform(new CropCircleTransformation(context))
+                    .into(viewHolder.ivProfileImage);
+        }
     }
 
     @Override
@@ -78,7 +88,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
 
     class ViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.ivImage)
-        ParseImageView ivImage;
+        ImageView ivImage;
+
+        @BindView(R.id.ivProfileImage)
+        ImageView ivProfileImage;
 
         @BindView(R.id.tvUsername)
         TextView tvUsername;
@@ -93,6 +106,19 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
         ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+
+            // Go to the user's profile
+            View.OnClickListener profileListener = new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(context, ProfileActivity.class);
+                    intent.putExtra("post", posts.get(getAdapterPosition()));
+                    context.startActivity(intent);
+                }
+            };
+
+            tvUsername.setOnClickListener(profileListener);
+            ivProfileImage.setOnClickListener(profileListener);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
