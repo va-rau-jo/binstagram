@@ -21,6 +21,8 @@ import com.parse.ParseFile;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import org.json.JSONArray;
+
 import java.io.File;
 
 import butterknife.BindView;
@@ -83,6 +85,8 @@ public class CaptionActivity extends AppCompatActivity {
         newPost.setDescription(description);
         newPost.setImage(image);
         newPost.setUser(user);
+        newPost.put("comments", new JSONArray());
+        newPost.put("likedBy", new JSONArray());
 
         newPost.saveInBackground(new SaveCallback() {
             @Override
