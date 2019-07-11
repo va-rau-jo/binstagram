@@ -13,7 +13,6 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
 import com.example.binstagram.R;
 import com.example.binstagram.utils.FileHelper;
@@ -54,9 +53,6 @@ public class SignupActivity extends AppCompatActivity {
     @BindView(R.id.btnSignUp)
     Button btnSignUp;
 
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
-
     private File photoFile;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -65,10 +61,6 @@ public class SignupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
         ButterKnife.bind(this);
-
-        setActionBar(toolbar);
-        if(getActionBar() != null)
-            getActionBar().setDisplayShowTitleEnabled(false);
     }
 
     @OnClick(R.id.btnUploadProfileImage)

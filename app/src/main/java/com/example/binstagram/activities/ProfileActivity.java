@@ -10,8 +10,8 @@ import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -22,7 +22,6 @@ import android.widget.Toolbar;
 import com.bumptech.glide.Glide;
 import com.example.binstagram.R;
 import com.example.binstagram.adapters.ProfilePostAdapter;
-import com.example.binstagram.models.EndlessRecyclerViewScrollListener;
 import com.example.binstagram.models.Post;
 import com.example.binstagram.utils.FileHelper;
 import com.parse.FindCallback;
@@ -61,6 +60,9 @@ public class ProfileActivity extends AppCompatActivity {
     @BindView(R.id.rvPosts)
     RecyclerView rvPosts;
 
+    @BindView(R.id.tvPostCount)
+    TextView tvPostCount;
+
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
@@ -81,33 +83,25 @@ public class ProfileActivity extends AppCompatActivity {
 
         if(getIntent().getExtras() != null) {
             user = (ParseUser) getIntent().getExtras().get("user");
-            initializeView();
         }
 
         posts = new ArrayList<>();
         adapter = new ProfilePostAdapter(posts);
-        StaggeredGridLayoutManager gridLayoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 3);
         rvPosts.setLayoutManager(gridLayoutManager);
         rvPosts.setAdapter(adapter);
 
-        EndlessRecyclerViewScrollListener scrollListener = new EndlessRecyclerViewScrollListener(gridLayoutManager) {
-            @Override
-            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                loadNextPosts();
-            }
-        };
-
         // Sets the bottom navigation bar on clicks
         addNavigationItemSelectedListener();
-
-        // Adds the scroll listener to RecyclerView
-        rvPosts.addOnScrollListener(scrollListener);
 
         // Add swiping up to refresh
         addSwipeRefreshListener();
 
         // Load the initial posts
         loadTopPosts();
+
+        // Display views after loading everything but the post amount
+        initializeView();
     }
 
     private void addNavigationItemSelectedListener() {
@@ -115,7 +109,13 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void addSwipeRefreshListener() {
-
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                adapter.clear();
+                loadTopPosts();
+            }
+        });
     }
 
     private void initializeView() {
@@ -127,6 +127,7 @@ public class ProfileActivity extends AppCompatActivity {
         boolean sameUser = ParseUser.getCurrentUser().getObjectId().equals(user.getObjectId());
 
         tvChangePicture.setVisibility(sameUser ? View.VISIBLE : View.GONE);
+
 
         Glide.with(this)
                 .load(user.getParseFile("profileImage").getUrl())
@@ -187,7 +188,6 @@ public class ProfileActivity extends AppCompatActivity {
 
         postQuery.chronological()
                 .withUser()
-                .getNext(posts.size())
                 .whereEqualTo("user", user);
 
         postQuery.findInBackground(new FindCallback<Post>() {
@@ -198,28 +198,8 @@ public class ProfileActivity extends AppCompatActivity {
                         posts.add(objects.get(i));
                         adapter.notifyItemInserted(posts.size() - 1);
                     }
-                } else {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
-
-    private void loadNextPosts() {
-        final Post.Query postQuery = new Post.Query();
-        postQuery.chronological()
-                .withUser()
-                .getNext(posts.size())
-                .whereEqualTo("user", user);
-
-        postQuery.findInBackground(new FindCallback<Post>() {
-            @Override
-            public void done(List<Post> objects, ParseException e) {
-                if(e == null) {
-                    for(int i = 0; i < objects.size(); i++) {
-                        posts.add(objects.get(i));
-                        adapter.notifyItemInserted(posts.size() - 1);
-                    }
+                    String postCount = posts.size() + "";
+                    tvPostCount.setText(postCount);
                 } else {
                     e.printStackTrace();
                 }

@@ -8,7 +8,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toolbar;
 
 import com.example.binstagram.R;
 import com.parse.LogInCallback;
@@ -33,19 +32,12 @@ public class LoginActivity extends AppCompatActivity {
     @BindView(R.id.etLoginPassword)
     EditText etPassword;
 
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
-
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
-
-        setActionBar(toolbar);
-        if(getActionBar() != null)
-            getActionBar().setDisplayShowTitleEnabled(false);
 
         // Persist user
         if(ParseUser.getCurrentUser() != null)
@@ -65,6 +57,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void login(String username, String password) {
+        Log.d("here", "logging in");
         ParseUser.logInInBackground(username, password, new LogInCallback() {
             @Override
             public void done(ParseUser user, ParseException e) {

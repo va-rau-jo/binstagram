@@ -8,14 +8,17 @@
 
     <ImageView
         android:id="@+id/logo"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="64dp"
         android:layout_marginTop="32dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginEnd="64dp"
+        android:contentDescription="Logo"
+        android:scaleType="fitCenter"
+        app:layout_constraintEnd_toEndOf="@+id/tilSignupUsername"
+        app:layout_constraintStart_toStartOf="@+id/tilSignupUsername"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/nav_logo_whiteout"
-        android:contentDescription="Logo" />
+        app:srcCompat="@drawable/nav_logo_whiteout" />
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/tilSignupUsername"
@@ -23,7 +26,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="32dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -131,5 +134,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnUploadProfileImage" />
-    
+
 </android.support.constraint.ConstraintLayout>
