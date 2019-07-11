@@ -120,7 +120,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
             tvUsername.setOnClickListener(profileListener);
             ivProfileImage.setOnClickListener(profileListener);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
+            ivImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(context, DetailActivity.class);

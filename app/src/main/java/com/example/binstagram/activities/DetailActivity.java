@@ -63,7 +63,7 @@ public class DetailActivity extends AppCompatActivity {
         tvDescription.setText(post.getDescription());
 
         Glide.with(this)
-                .load(post.getImage().getUrl())
+                .load(post.getUser().getParseFile("profileImage").getUrl())
                 .bitmapTransform(new CropCircleTransformation(this))
                 .into(ivProfileImage);
 
