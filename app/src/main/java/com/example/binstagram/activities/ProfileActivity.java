@@ -114,6 +114,7 @@ public class ProfileActivity extends AppCompatActivity {
             public void onRefresh() {
                 adapter.clear();
                 loadTopPosts();
+                swipeContainer.setRefreshing(false);
             }
         });
     }
