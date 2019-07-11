@@ -125,8 +125,9 @@ public class HomeActivity extends AppCompatActivity {
                         // do something here
                         return true;
                     case R.id.profile:
-                        startActivity(new Intent(HomeActivity.this, ProfileActivity.class));
-                        finish();
+                        Intent intent = new Intent(HomeActivity.this, ProfileActivity.class);
+                        intent.putExtra("user", ParseUser.getCurrentUser());
+                        startActivity(intent);
                         return true;
                     default: return true;
                 }

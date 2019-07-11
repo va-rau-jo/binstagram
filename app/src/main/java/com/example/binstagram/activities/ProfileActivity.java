@@ -21,7 +21,7 @@ import android.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
 import com.example.binstagram.R;
-import com.example.binstagram.adapters.PostAdapter;
+import com.example.binstagram.adapters.ProfilePostAdapter;
 import com.example.binstagram.models.EndlessRecyclerViewScrollListener;
 import com.example.binstagram.models.Post;
 import com.example.binstagram.utils.FileHelper;
@@ -66,8 +66,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     private ParseUser user;
     private ArrayList<Post> posts;
-    private PostAdapter adapter;
-    private EndlessRecyclerViewScrollListener scrollListener;
+    private ProfilePostAdapter adapter;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -81,24 +80,17 @@ public class ProfileActivity extends AppCompatActivity {
             getActionBar().setDisplayShowTitleEnabled(false);
 
         if(getIntent().getExtras() != null) {
-            Post post = (Post) getIntent().getExtras().get("post");
-
-            if (post == null) {
-                Toast.makeText(this, "Could not open profile", Toast.LENGTH_SHORT).show();
-                finish();
-            } else {
-                user = post.getUser();
-                initializeView();
-            }
+            user = (ParseUser) getIntent().getExtras().get("user");
+            initializeView();
         }
 
         posts = new ArrayList<>();
-        adapter = new PostAdapter(posts);
-        StaggeredGridLayoutManager gridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        adapter = new ProfilePostAdapter(posts);
+        StaggeredGridLayoutManager gridLayoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
         rvPosts.setLayoutManager(gridLayoutManager);
         rvPosts.setAdapter(adapter);
 
-        scrollListener = new EndlessRecyclerViewScrollListener(gridLayoutManager) {
+        EndlessRecyclerViewScrollListener scrollListener = new EndlessRecyclerViewScrollListener(gridLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 loadNextPosts();
@@ -192,10 +184,11 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void loadTopPosts() {
         final Post.Query postQuery = new Post.Query();
+
         postQuery.chronological()
                 .withUser()
                 .getNext(posts.size())
-                .whereEqualTo("user.username", user.getUsername());
+                .whereEqualTo("user", user);
 
         postQuery.findInBackground(new FindCallback<Post>() {
             @Override
@@ -217,7 +210,7 @@ public class ProfileActivity extends AppCompatActivity {
         postQuery.chronological()
                 .withUser()
                 .getNext(posts.size())
-                .whereEqualTo("user.username", user.getUsername());
+                .whereEqualTo("user", user);
 
         postQuery.findInBackground(new FindCallback<Post>() {
             @Override
