@@ -1,6 +1,5 @@
 package com.example.binstagram.adapters;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -25,6 +24,7 @@ import com.parse.SaveCallback;
 import org.json.JSONArray;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -62,7 +62,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
      * @param viewHolder The already created view holder that will be populated
      * @param index      The index of the view holder
      */
-    @SuppressLint("DefaultLocale")
     @Override
     public void onBindViewHolder(@NonNull PostAdapter.ViewHolder viewHolder, int index) {
         Post post = posts.get(index);
@@ -86,7 +85,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                 ContextCompat.getDrawable(context, R.drawable.ufi_heart) :
                 ContextCompat.getDrawable(context, R.drawable.ufi_heart_active));
 
-        viewHolder.tvLikeCount.setText(String.format("%d", post.userLikes().length()));
+        viewHolder.tvLikeCount.setText(String.format(Locale.ENGLISH, "%d", post.userLikes().length()));
 
         JSONArray comments = post.getComments();
     }
@@ -160,7 +159,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                         @Override
                         public void done(ParseException e) {
                             if (e == null) {
-                                tvLikeCount.setText(String.format("%d", post.userLikes().length()));
+                                tvLikeCount.setText(String.format(Locale.ENGLISH, "%d", post.userLikes().length()));
                             }
                         }
                     });

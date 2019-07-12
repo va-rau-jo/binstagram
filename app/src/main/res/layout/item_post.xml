@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="16dp">
@@ -23,10 +22,11 @@
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        android:textColor="@color/black"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@id/ivProfileImage"
         app:layout_constraintStart_toEndOf="@id/ivProfileImage"
-        app:layout_constraintTop_toTopOf="@id/ivProfileImage" />
+        app:layout_constraintTop_toTopOf="@id/ivProfileImage"
+        app:layout_constraintBottom_toBottomOf="@id/ivProfileImage"/>
 
     <ImageView
         android:id="@+id/ivImage"
@@ -44,56 +44,54 @@
 
     <ImageButton
         android:id="@+id/ibLike"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginLeft="24dp"
-        android:layout_marginTop="16dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="8dp"
         android:background="@null"
+        android:contentDescription="Like"
         android:scaleType="fitCenter"
         android:src="@drawable/ufi_heart"
         app:layout_constraintStart_toStartOf="@id/ivImage"
-        app:layout_constraintTop_toBottomOf="@id/ivImage"
-        android:contentDescription="Like" />
+        app:layout_constraintTop_toBottomOf="@id/ivImage" />
 
     <ImageButton
         android:id="@+id/ibComment"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         android:layout_marginStart="24dp"
         android:layout_marginLeft="24dp"
         android:background="@null"
+        android:contentDescription="Comment"
         android:scaleType="fitCenter"
         android:src="@drawable/ufi_comment"
         app:layout_constraintStart_toEndOf="@id/ibLike"
-        app:layout_constraintTop_toTopOf="@id/ibLike"
-        android:contentDescription="Comment" />
+        app:layout_constraintTop_toTopOf="@id/ibLike" />
 
     <ImageButton
         android:id="@+id/ibDM"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         android:layout_marginStart="24dp"
         android:layout_marginLeft="24dp"
         android:background="@null"
+        android:contentDescription="DM"
         android:scaleType="fitCenter"
         android:src="@drawable/ufi_direct"
         app:layout_constraintStart_toEndOf="@id/ibComment"
-        app:layout_constraintTop_toTopOf="@id/ibComment"
-        android:contentDescription="DM" />
+        app:layout_constraintTop_toTopOf="@id/ibComment" />
 
     <TextView
         android:id="@+id/tvUsernameLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
         android:textColor="@color/black"
         android:textSize="14sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@id/ibLike"
         app:layout_constraintTop_toBottomOf="@+id/ibLike" />
 
     <TextView
@@ -102,7 +100,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
         android:textSize="14sp"
         app:layout_constraintStart_toEndOf="@id/tvUsernameLabel"

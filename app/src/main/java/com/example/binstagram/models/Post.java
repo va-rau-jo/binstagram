@@ -20,20 +20,21 @@ public class Post extends ParseObject {
     private static final String KEY_DESCRIPTION = "description";
     private static final String KEY_IMAGE = "image";
     private static final String KEY_USER = "user";
-    private static final String KEY_COMMENTS = "user";
+    private static final String KEY_COMMENTS = "comments";
+    private static final String KEY_LIKED_BY = "likedBy";
 
     public JSONArray userLikes() {
-        return getJSONArray("likedBy");
+        return getJSONArray(KEY_LIKED_BY);
     }
 
     public void likePost(ParseUser user) {
-        add("likedBy", user);
+        add(KEY_LIKED_BY, user);
     }
 
     public void unlikePost(ParseUser user) {
         List<ParseUser> users = new ArrayList<>();
         users.add(user);
-        removeAll("likedBy", users);
+        removeAll(KEY_LIKED_BY, users);
     }
 
     public boolean isNotLiked() {
@@ -109,7 +110,7 @@ public class Post extends ParseObject {
         }
 
         public Query withUser() {
-            include("user");
+            include(KEY_USER);
             return this;
         }
     }
