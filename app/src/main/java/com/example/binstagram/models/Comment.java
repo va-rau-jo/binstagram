@@ -5,9 +5,6 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.Date;
 
 @ParseClassName("Comment")
@@ -16,16 +13,6 @@ public class Comment extends ParseObject {
     private static final String KEY_BODY = "body";
     private static final String KEY_USER = "user";
     private static final String KEY_RESPONDING_TO = "respondingTo";
-
-    private ParseUser user;
-    private String body;
-    private ParseUser respondingTo;
-    private Date timeStamp;
-
-    public Comment fromJSON(JSONObject jsonObject) throws JSONException {
-        //user = jsonObject.getJSONArray("user");
-        return new Comment();
-    }
 
     public ParseUser getUser() {
         return getParseUser(KEY_USER);
@@ -58,8 +45,8 @@ public class Comment extends ParseObject {
             super(Comment.class);
         }
 
-        public Query withUser() {
-            include("user");
+        public Comment.Query withUser() {
+            include(KEY_USER);
             return this;
         }
     }

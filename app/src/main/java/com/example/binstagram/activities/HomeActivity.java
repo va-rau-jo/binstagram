@@ -173,7 +173,7 @@ public class HomeActivity extends AppCompatActivity {
         });
     }
 
-    private  void loadNextPosts() {
+    private void loadNextPosts() {
         final Post.Query postQuery = new Post.Query();
         postQuery.chronological()
                 .withUser()

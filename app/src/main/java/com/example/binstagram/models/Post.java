@@ -23,37 +23,6 @@ public class Post extends ParseObject {
     private static final String KEY_COMMENTS = "comments";
     private static final String KEY_LIKED_BY = "likedBy";
 
-    public JSONArray userLikes() {
-        return getJSONArray(KEY_LIKED_BY);
-    }
-
-    public void likePost(ParseUser user) {
-        add(KEY_LIKED_BY, user);
-    }
-
-    public void unlikePost(ParseUser user) {
-        List<ParseUser> users = new ArrayList<>();
-        users.add(user);
-        removeAll(KEY_LIKED_BY, users);
-    }
-
-    public boolean isNotLiked() {
-        JSONArray likes = userLikes();
-
-        if(likes != null) {
-            for (int i = 0; i < likes.length(); i++) {
-                try {
-                    if (likes.getJSONObject(i).getString("objectId")
-                            .equals(ParseUser.getCurrentUser().getObjectId()))
-                        return false;
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return true;
-    }
-
     public String getDescription() {
         return getString(KEY_DESCRIPTION);
     }
@@ -64,6 +33,10 @@ public class Post extends ParseObject {
 
     public ParseUser getUser() {
         return getParseUser(KEY_USER);
+    }
+
+    public JSONArray getLikes() {
+        return getJSONArray(KEY_LIKED_BY);
     }
 
     public JSONArray getComments() {
@@ -84,8 +57,35 @@ public class Post extends ParseObject {
         put(KEY_USER, user);
     }
 
+    public void likePost(ParseUser user) {
+        add(KEY_LIKED_BY, user);
+    }
+
+    public void unlikePost(ParseUser user) {
+        List<ParseUser> users = new ArrayList<>();
+        users.add(user);
+        removeAll(KEY_LIKED_BY, users);
+    }
+
     public void addComment(Comment comment) {
         add(KEY_COMMENTS, comment);
+    }
+
+    public boolean isNotLiked() {
+        JSONArray likes = getLikes();
+
+        if(likes != null) {
+            for (int i = 0; i < likes.length(); i++) {
+                try {
+                    if (likes.getJSONObject(i).getString("objectId")
+                            .equals(ParseUser.getCurrentUser().getObjectId()))
+                        return false;
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return true;
     }
 
     public static class Query extends ParseQuery {

@@ -2,6 +2,7 @@ package com.example.binstagram.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
@@ -10,24 +11,31 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.binstagram.R;
+import com.example.binstagram.activities.CommentActivity;
 import com.example.binstagram.activities.DetailActivity;
 import com.example.binstagram.activities.ProfileActivity;
+import com.example.binstagram.models.Comment;
 import com.example.binstagram.models.Post;
+import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
@@ -63,8 +71,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
      * @param index      The index of the view holder
      */
     @Override
-    public void onBindViewHolder(@NonNull PostAdapter.ViewHolder viewHolder, int index) {
-        Post post = posts.get(index);
+    public void onBindViewHolder(@NonNull final PostAdapter.ViewHolder viewHolder, int index) {
+        final Post post = posts.get(index);
         ParseUser user = post.getUser();
         viewHolder.tvUsername.setText(user.getUsername());
         viewHolder.tvUsernameLabel.setText(user.getUsername());
@@ -81,13 +89,49 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                     .into(viewHolder.ivProfileImage);
         }
 
+        // Do like logic
         viewHolder.ibLike.setBackground(post.isNotLiked() ?
                 ContextCompat.getDrawable(context, R.drawable.ufi_heart) :
                 ContextCompat.getDrawable(context, R.drawable.ufi_heart_active));
 
-        viewHolder.tvLikeCount.setText(String.format(Locale.ENGLISH, "%d", post.userLikes().length()));
+        viewHolder.tvLikeCount.setText(String.format(Locale.ENGLISH, "%d", post.getLikes().length()));
 
-        JSONArray comments = post.getComments();
+        // Do all comment logic
+        Comment.Query query = new Comment.Query();
+        query.withUser();
+
+        query.findInBackground(new FindCallback<Comment>() {
+            @Override
+            public void done(List<Comment> objects, ParseException e) {
+                if(e == null) {
+                    JSONArray postComments = post.getComments();
+
+                    for(int i = 0; i < postComments.length(); i++) {
+                        TextView nameLabel = new TextView(context);
+                        nameLabel.setTextColor(Color.BLACK);
+
+                        TextView textView = new TextView(context);
+                        try {
+                            String objectId = postComments.getJSONObject(i).getString("objectId");
+
+                            for (Comment comment : objects) {
+                                if(comment.getObjectId().equals(objectId)) {
+                                    //nameLabel.setText(comment.getUser().getUsername());
+                                    String text = comment.getUser().getUsername() + " " + comment.getBody();
+                                    textView.setText(text);
+                                    break;
+                                }
+                            }
+                            viewHolder.commentLayout.addView(textView);
+                        } catch (JSONException ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                } else {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     @Override
@@ -126,6 +170,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         @BindView(R.id.tvLikeCount)
         TextView tvLikeCount;
 
+        @BindView(R.id.commentLayout)
+        LinearLayout commentLayout;
+
         ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
@@ -142,37 +189,48 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
             tvUsername.setOnClickListener(profileListener);
             ivProfileImage.setOnClickListener(profileListener);
+        }
 
-            ibLike.setOnClickListener(new View.OnClickListener() {
+        /**
+         * Image onclick, goes to the detail view
+         */
+        @OnClick(R.id.ivImage)
+        void viewDetails() {
+            Intent intent = new Intent(context, DetailActivity.class);
+            intent.putExtra("post", posts.get(getAdapterPosition()));
+            context.startActivity(intent);
+        }
+
+        /**
+         * Comment button onclick, goes to comment activity
+         */
+        @OnClick(R.id.ibComment)
+        void comment() {
+            Intent intent = new Intent(context, CommentActivity.class);
+            intent.putExtra("post", posts.get(getAdapterPosition()));
+            context.startActivity(intent);
+        }
+
+        /**
+         * Like button onclick, likes and unlikes
+         */
+        @OnClick(R.id.ibLike)
+        void likePost() {
+            final Post post = posts.get(getAdapterPosition());
+
+            if (post.isNotLiked()) {
+                ibLike.setBackground(ContextCompat.getDrawable(context, R.drawable.ufi_heart_active));
+                post.likePost(ParseUser.getCurrentUser());
+            } else {
+                ibLike.setBackground(ContextCompat.getDrawable(context, R.drawable.ufi_heart));
+                post.unlikePost(ParseUser.getCurrentUser());
+            }
+            post.saveInBackground(new SaveCallback() {
                 @Override
-                public void onClick(View v) {
-                    final Post post = posts.get(getAdapterPosition());
-
-                    if (post.isNotLiked()) {
-                        ibLike.setBackground(ContextCompat.getDrawable(context, R.drawable.ufi_heart_active));
-                        post.likePost(ParseUser.getCurrentUser());
-                    } else {
-                        ibLike.setBackground(ContextCompat.getDrawable(context, R.drawable.ufi_heart));
-                        post.unlikePost(ParseUser.getCurrentUser());
+                public void done(ParseException e) {
+                    if (e == null) {
+                        tvLikeCount.setText(String.format(Locale.ENGLISH, "%d", post.getLikes().length()));
                     }
-                    post.saveInBackground(new SaveCallback() {
-                        @Override
-                        public void done(ParseException e) {
-                            if (e == null) {
-                                tvLikeCount.setText(String.format(Locale.ENGLISH, "%d", post.userLikes().length()));
-                            }
-                        }
-                    });
-                }
-            });
-
-
-            ivImage.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(context, DetailActivity.class);
-                    intent.putExtra("post", posts.get(getAdapterPosition()));
-                    context.startActivity(intent);
                 }
             });
         }

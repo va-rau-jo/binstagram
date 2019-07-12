@@ -89,7 +89,7 @@ public class DetailActivity extends AppCompatActivity {
             @Override
             public void done(ParseException e) {
                 if (e == null) {
-                    tvLikeCount.setText(String.format(Locale.ENGLISH, "%d", post.userLikes().length()));
+                    tvLikeCount.setText(String.format(Locale.ENGLISH, "%d", post.getLikes().length()));
                 }
             }
         });
@@ -113,7 +113,7 @@ public class DetailActivity extends AppCompatActivity {
                 ContextCompat.getDrawable(this, R.drawable.ufi_heart) :
                 ContextCompat.getDrawable(this, R.drawable.ufi_heart_active));
 
-        tvLikeCount.setText(String.format(Locale.ENGLISH, "%d", post.userLikes().length()));
+        tvLikeCount.setText(String.format(Locale.ENGLISH, "%d", post.getLikes().length()));
 
         Glide.with(this)
                 .load(post.getUser().getParseFile("profileImage").getUrl())
