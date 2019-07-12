@@ -16,7 +16,7 @@ import java.util.List;
 @ParseClassName("Post")
 public class Post extends ParseObject {
 
-    public static final Integer QUERY_LIMIT = 3;
+    public static final Integer QUERY_LIMIT = 20;
     private static final String KEY_DESCRIPTION = "description";
     private static final String KEY_IMAGE = "image";
     private static final String KEY_USER = "user";

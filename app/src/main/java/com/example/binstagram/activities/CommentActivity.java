@@ -56,7 +56,6 @@ public class CommentActivity extends AppCompatActivity {
         Comment comment = new Comment();
         comment.setUser(ParseUser.getCurrentUser());
         comment.setBody(etComment.getText().toString());
-        comment.setACL(new ParseACL(ParseUser.getCurrentUser()));
 
         post.addComment(comment);
         post.saveInBackground(new SaveCallback() {
